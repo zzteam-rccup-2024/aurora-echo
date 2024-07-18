@@ -56,4 +56,4 @@ def train():
 
 
 def load():
-    model.load_state_dict(torch.load('data/sentiment/model.pth'))
+    model.load_state_dict(torch.load('data/sentiment/model.pth', map_location=device))

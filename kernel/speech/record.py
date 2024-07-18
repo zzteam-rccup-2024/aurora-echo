@@ -1,3 +1,4 @@
+import time
 import numpy as np
 import pyaudio
 from kernel.speech.config import FORMAT, CHANNELS, RATE, CHUNK, SILENCE_THRESHOLD, SILENCE_DURATION
@@ -7,6 +8,8 @@ from datetime import datetime
 
 
 def record_audio():
+    print('Initializing the recorder...')
+    time.sleep(1)
     audio = pyaudio.PyAudio()
     stream = audio.open(format=FORMAT, channels=CHANNELS,
                         rate=RATE, input=True,

@@ -1,9 +1,11 @@
 from kernel.text.sentiment.datasets import TEXT
 from kernel.config import device
 import torch
+from kernel.text.sentiment.model import model
+from kernel.text.sentiment.datasets import nlp
 
 
-def predict_sentiment(model, sentence, nlp, min_len=5):
+def predict_sentiment(sentence, min_len=5):
     model.eval()
     tokens = [tok.text for tok in nlp(sentence)]
     if len(tokens) < min_len:

@@ -1,8 +1,10 @@
 # Uses IMDB dataset from torchtext.datasets
+import gc
 import torch
-from torch.utils.data import random_split
 from torchtext import data, datasets
 import spacy
+
+print('Loading spaCy embedding layer...')
 
 nlp = spacy.load('en_core_web_sm')
 
@@ -12,6 +14,8 @@ LABEL = data.LabelField(dtype = torch.float)
 dataset = datasets.IMDB.splits(TEXT, LABEL)[0]
 
 train_set, test_set = dataset.split()
+
+print('Building vocabulary...')
 
 TEXT.build_vocab(train_set, max_size=25000)
 LABEL.build_vocab(train_set)

@@ -1,7 +1,9 @@
+import gc
 import torch.nn as nn
 import torch
 from kernel.text.sentiment.datasets import INPUT_DIM, EMBEDDING_DIM, HIDDEN_DIM, OUTPUT_DIM, N_LAYERS, BIDIRECTIONAL, DROPOUT
 from kernel.config import device
+
 
 class SentimentRNN(nn.Module):
     def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim, n_layers, bidirectional, dropout):
@@ -21,3 +23,10 @@ class SentimentRNN(nn.Module):
 model = SentimentRNN(INPUT_DIM, EMBEDDING_DIM, HIDDEN_DIM, OUTPUT_DIM, N_LAYERS, BIDIRECTIONAL, DROPOUT).to(device=device)
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 criterion = nn.CrossEntropyLoss()
+
+
+def release_model():
+    del model
+    del optimizer
+    del criterion
+    gc.collect()
