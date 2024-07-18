@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../HoMoPlay/.idea/HoMoPlay.iml" filepath="$PROJECT_DIR$/../HoMoPlay/.idea/HoMoPlay.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/aurora-echo.iml" filepath="$PROJECT_DIR$/.idea/aurora-echo.iml" />
     </modules>
   </component>

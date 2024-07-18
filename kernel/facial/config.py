@@ -1,1 +1,1 @@
-batch_size = 64
+batch_size = 32

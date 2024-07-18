@@ -24,7 +24,7 @@ def train_facial():
 
     train_loader, test_loader = load_data_loader()
     model, criterion, optimizer = fetch_model()
-    train_model(model, criterion, optimizer, train_loader, test_loader, "facial.pth")
+    train_model(model, criterion, optimizer, train_loader, test_loader, "data/models/facial.pth")
 
 
 if __name__ == "__main__":

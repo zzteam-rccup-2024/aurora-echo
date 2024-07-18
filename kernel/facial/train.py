@@ -2,7 +2,7 @@ from kernel.config import device
 import torch
 from tqdm import tqdm
 
-epochs = 10
+epochs = 8
 
 
 def train_model(model, criterion, optimizer, train_loader, val_loader, save_path):
@@ -20,16 +20,24 @@ def train_model(model, criterion, optimizer, train_loader, val_loader, save_path
 
         model.eval()
         val_loss = 0.0
+        correct = 0
+        total = 0
         with torch.no_grad():
             for inputs, labels in tqdm(val_loader, desc=f"(Evaluation) Epoch {epoch + 1}/{epochs}"):
                 inputs, labels = inputs.to(device), labels.to(device)
                 outputs = model(inputs)
                 loss = criterion(outputs, labels)
                 val_loss += loss.item()
+                _, preds = torch.max(outputs, 1)
+                correct += (preds == labels).sum().item()
+                total += labels.size(0)
+
+        accuracy = correct / total
 
         print(f"Epoch {epoch + 1}/{epochs}.. "
               f"Train loss: {train_loss / len(train_loader):.3f}.. "
-              f"Val loss: {val_loss / len(val_loader):.3f}")
+              f"Val loss: {val_loss / len(val_loader):.3f}.. "
+              f"Accuracy: {accuracy:.3f}")
 
-    torch.save(model.state_dict(), save_path)
-    print("Model saved")
+        torch.save(model.state_dict(), save_path)
+        print("Model saved")

@@ -42,6 +42,7 @@ transform = transforms.Compose([
     ToNumpy(),
     CropToFace(),
     transforms.ToPILImage(),
+    transforms.Resize((256, 256)),
     transforms.RandomRotation((-180, 180)),
     transforms.RandomHorizontalFlip(),
     transforms.RandomVerticalFlip(),
