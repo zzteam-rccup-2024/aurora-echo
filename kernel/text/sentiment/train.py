@@ -12,7 +12,7 @@ def binary_accuracy(preds, y):
     return correct.sum() / len(correct)
 
 
-def train():
+def train_sentiment_model():
     model.train()
     for epoch in range(epochs):
         model.train()
@@ -55,5 +55,5 @@ def train():
     torch.save(model.state_dict(), 'data/sentiment/model.pth')
 
 
-def load():
+def load_sentiment_model():
     model.load_state_dict(torch.load('data/sentiment/model.pth', map_location=device))
