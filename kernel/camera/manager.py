@@ -2,6 +2,9 @@ import asyncio
 import cv2
 from kernel.facial.predict import FacialEmotionRecognizer
 from kernel.gesture.thumb import get_thumb
+from kernel.facial.mosaic import PerformMosaic
+
+transform = PerformMosaic()
 
 
 class CameraManager:
@@ -32,6 +35,11 @@ class CameraManager:
     def get_facial_list(self):
         return list(map(lambda x: x[0], sorted(self.facial_expressions.items(), key=lambda x: x[1], reverse=True)))
 
+    def get_emotion_percents(self):
+        total = sum(self.facial_expressions.values())
+        result = [(k, v / total) for k, v in self.facial_expressions.items() if v > 0]
+        return sorted(result, key=lambda x: x[1], reverse=True)
+
     def recognize_gesture(self):
         frame = self.get_frame()
         thumb = get_thumb(frame)
@@ -48,6 +56,8 @@ class CameraManager:
             if not _:
                 break
             thumb = self.recognize_gesture()
+            if mosaic:
+                frame = transform(frame)
             cv2.putText(frame, thumb, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
             emotion = self.recognize_face()
             cv2.putText(frame, emotion, (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)

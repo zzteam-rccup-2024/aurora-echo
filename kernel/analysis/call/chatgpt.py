@@ -2,6 +2,7 @@ from openai import OpenAI
 from config import OPENAI_KEY
 from typing import TypedDict
 import json
+from kernel.availability import check_availability
 
 client = OpenAI(api_key=OPENAI_KEY)
 
@@ -35,7 +36,10 @@ def generate_prompt(target, config: GeneratePromptConfig):
     return prompt
 
 
-def send_to_chatgpt(prompt, model="gpt-3.5-turbo"):
+def send_to_chatgpt(prompt, model="gpt-4o-mini"):
+    if not check_availability():
+        raise Exception('ChatGPT is not available in your country, it may be due to the censorship of the Internet, '
+                        'or the unavailability of OpenAI API Service.')
     return client.chat.completions.create(
         model=model,
         messages=prompt,

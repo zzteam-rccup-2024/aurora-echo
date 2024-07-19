@@ -14,7 +14,6 @@ def send_to_qwen_offline(prompt):
     model = AutoModelForCausalLM.from_pretrained(
         f"{model_name}",
         torch_dtype="auto",
-        device_map=device
     )
     tokenizer = AutoTokenizer.from_pretrained(f"{model_name}")
 
@@ -23,7 +22,7 @@ def send_to_qwen_offline(prompt):
         tokenize=False,
         add_generation_prompt=True
     )
-    model_inputs = tokenizer([text], return_tensors="pt").to(device)
+    model_inputs = tokenizer([text], return_tensors="pt")
 
     generated_ids = model.generate(
         model_inputs.input_ids,
