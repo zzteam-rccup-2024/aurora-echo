@@ -5,7 +5,7 @@ from transformers import AutoProcessor, AutoModelForCTC
 from kernel.config import device
 
 
-def recognize_audio(audio: np.ndarray):
+def recognize_audio(audio: np.ndarray) -> str:
     print('Initializing the recognizer...')
 
     processor = AutoProcessor.from_pretrained("data/models/facebook/wav2vec2-large-960h")

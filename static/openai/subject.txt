@@ -1,1 +1,1 @@
-According to the user's feedback: {{ feedback }}, please generate a short report to the resource provider.
+According to the user's feedback: {{ feedback }}, please generate a short report of the product to the resource provider to improve the service.

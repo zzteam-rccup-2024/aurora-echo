@@ -30,11 +30,16 @@ class CameraManager:
         return result
 
     def get_facial_list(self):
-        sorted(self.facial_expressions.items(), key=lambda x: x[1], reverse=True)
+        return list(map(lambda x: x[0], sorted(self.facial_expressions.items(), key=lambda x: x[1], reverse=True)))
 
     def recognize_gesture(self):
         frame = self.get_frame()
-        return get_thumb(frame)
+        thumb = get_thumb(frame)
+        if thumb == 'thumb up':
+            self.thumbs['up'] += 1
+        elif thumb == 'thumb down':
+            self.thumbs['down'] += 1
+        return thumb
 
     def video_frame(self, mosaic=False):
         _, frame = self.camera.read()

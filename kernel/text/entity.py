@@ -1,8 +1,10 @@
 import spacy
 
 
-def recognize_entities(sentences: str):
+def recognize_entities(sentences: str) -> list[tuple[str, str]]:
     nlp = spacy.load('en_core_web_sm')
     doc = nlp(sentences)
+    result = []
     for ent in doc.ents:
-        print(ent.text, ent.start_char, ent.end_char, ent.label_)
+        result.append((ent.text, ent.label_))
+    return result

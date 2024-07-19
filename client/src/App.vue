@@ -40,7 +40,7 @@ const mosaic = ref(false)
       <ElAside width="2em"></ElAside>
       <ElMain>
         <ElRow>
-          <ElCol :span="11">
+          <ElCol :span="8">
             <ElCard shadow="never">
               <p class="text-center">Configuration</p>
               <ElForm>
@@ -48,12 +48,17 @@ const mosaic = ref(false)
                   <ElRadioGroup v-model="model">
                     <ElRadio v-for="item in models" :key="item.value" :label="item.value" border>
                       {{ item.label }}
-                      <ElTag v-for="tag in item.badge" :key="tag.toString()" type="success" effect="plain">{{ tag }}</ElTag>
+                      <ElTag v-for="tag in item.badge" :key="tag.toString()" type="success" effect="plain" size="small">
+                        {{ tag }}
+                      </ElTag>
                     </ElRadio>
                   </ElRadioGroup>
                 </ElFormItem>
                 <ElFormItem label="Mosaic">
                   <ElSwitch v-model="mosaic" active-text="On" inactive-text="Off" />
+                </ElFormItem>
+                <ElFormItem style="text-align: right">
+                  <ElButton text bg type="primary" class="w-full">Start</ElButton>
                 </ElFormItem>
               </ElForm>
             </ElCard>

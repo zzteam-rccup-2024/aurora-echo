@@ -1,3 +1,4 @@
+import socketio
 from kernel.speech.record import save_to_wav, record_audio
 from kernel.speech.recognize import recognize_audio
 from kernel.text.entity import recognize_entities
@@ -9,6 +10,9 @@ from kernel.camera.manager import CameraManager
 
 app = FastAPI()
 camera = CameraManager()
+sio = socketio.Server(cors_allowed_origins='*')
+sio_asgi_app = socketio.ASGIApp(socketio_server=sio, other_asgi_app=app)
+app.add_websocket_route("/socket.io/", sio_asgi_app)
 
 
 @app.get("/")

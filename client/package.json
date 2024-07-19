@@ -17,6 +17,7 @@
   "dependencies": {
     "@vueuse/core": "^10.11.0",
     "animate.css": "^4.1.1",
+    "axios": "^1.7.2",
     "pinia": "^2.1.7",
     "unocss": "^0.61.5",
     "vue": "^3.4.32",

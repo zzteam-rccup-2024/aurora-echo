@@ -1,0 +1,4 @@
+Service feedback systems are widely used in daily life, but the traditional text feedback system is not vivid and direct enough.
+Users will only give its rate and sometimes write a few words, or be required to fill in a blank with staggering amount of questions, which is not enough for the resource provider to improve its service.
+In this paper, we propose a new feedback system, named \textbf{Aurora Echo}, which provides audio-visual feedback for the resource provider.
+Through numerous artificial intelligence, such as LLM, we can make the system more friendly to not only user but also the resource provider.

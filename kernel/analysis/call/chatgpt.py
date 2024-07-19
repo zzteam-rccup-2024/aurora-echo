@@ -11,6 +11,7 @@ class GeneratePromptConfig(TypedDict):
     expression: str
     sentiment: float
     feedback: str
+    product_desc: str
 
 
 def generate_prompt(target, config: GeneratePromptConfig):
@@ -21,7 +22,8 @@ def generate_prompt(target, config: GeneratePromptConfig):
         .read()\
         .replace('{{ named_entity }}', json.dumps(config['named_entity']))\
         .replace('{{ expression }}', config['expression'])\
-        .replace('{{ sentiment }}', str(config['sentiment']))
+        .replace('{{ sentiment }}', str(config['sentiment'])\
+        .replace('{{ product_desc }}', str(config['product_desc'])))
     user_prompt = open(f'static/openai/{target}.txt', 'r').read() \
         .replace('{{ feedback }}', config['feedback'])
 
