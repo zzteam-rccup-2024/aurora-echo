@@ -1,16 +1,17 @@
 <script setup language="ts">
 import { ref, onMounted, watch } from 'vue'
-import { ElSegmented, ElButton, ElRow, ElCol } from 'element-plus'
+import { ElSegmented, ElScrollbar, ElRow, ElCol } from 'element-plus'
 import AEAnalysis from '@/components/AEAnalysis.vue'
 import { start_llm, get_llm } from '@/plugins/apis'
 import compileMarkdownToHTML from '@/plugins/markdown'
+import { useWindowSize} from '@vueuse/core'
 
 onMounted(() => {
   start_llm()
 })
 
 const perspectives = ['Service Provider', 'Customer']
-
+const { width, height } = useWindowSize()
 const perspective = ref('Custormer')
 const loaded = ref(false)
 
@@ -46,7 +47,9 @@ watch(perspective, load_text)
       <ElSegmented v-model="perspective" :options="perspectives" />
       <div class="py-2 w-full">
         <ElCard class="w-full font-serif text-lg" v-loading="loading || !loaded">
-          <p v-html="text" />
+          <ElScrollbar :max-height="height * 0.6">
+            <p v-html="text" />
+          </ElScrollbar>
         </ElCard>
       </div>
     </ElCol>

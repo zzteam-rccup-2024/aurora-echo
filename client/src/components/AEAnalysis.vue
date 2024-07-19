@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ElCard, ElForm, ElFormItem, ElRate, ElTag, ElStatistic } from 'element-plus'
+import { ElCard, ElForm, ElFormItem, ElRate, ElTag, ElStatistic, ElButton } from 'element-plus'
 import { ref, toRefs } from 'vue'
 import { useEmotionStore } from '@/stores/emotion'
+import { useRouter } from 'vue-router'
 
 const emotionStore = useEmotionStore()
+const router = useRouter()
 
 const props = withDefaults(defineProps<{
   complex: boolean
@@ -29,6 +31,9 @@ const { started, text, sentiment, entities, emotions } = toRefs(emotionStore)
       <ElFormItem v-if="complex" label="Emotion">
         {{ emotions }}
         <ElStatistic v-for="emotion in emotions" :key="emotion[0]" :title="emotion[0]" v-model="emotion[1]" />
+      </ElFormItem>
+      <ElFormItem>
+        <ElButton type="primary" @click="router.push('/llm')">Recognize</ElButton>
       </ElFormItem>
     </ElForm>
   </ElCard>
