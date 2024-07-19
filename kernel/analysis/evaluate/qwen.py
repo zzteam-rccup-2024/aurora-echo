@@ -12,11 +12,11 @@ model_name = "Qwen/Qwen2-1.5B-Instruct"
 
 def send_to_qwen_offline(prompt):
     model = AutoModelForCausalLM.from_pretrained(
-        f"data/models/{model_name}",
+        f"{model_name}",
         torch_dtype="auto",
         device_map=device
     )
-    tokenizer = AutoTokenizer.from_pretrained(f"data/models/{model_name}")
+    tokenizer = AutoTokenizer.from_pretrained(f"{model_name}")
 
     text = tokenizer.apply_chat_template(
         prompt,

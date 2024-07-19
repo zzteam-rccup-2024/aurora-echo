@@ -1,6 +1,7 @@
+import asyncio
 import cv2
-from cv2.typing import MatLike
 from kernel.facial.predict import FacialEmotionRecognizer
+from kernel.gesture.thumb import get_thumb
 
 
 class CameraManager:
@@ -11,6 +12,7 @@ class CameraManager:
                                    'surprise': 0}
         self.hand_action = 'none'
         self.emotion = 'neutral'
+        self.thumbs = {'up': 0, 'down': 0}
 
     def get_frame(self):
         ret, frame = self.camera.read()
@@ -18,12 +20,34 @@ class CameraManager:
             return None
         return frame
 
-    def recognize_face(self, frame: MatLike):
+    def recognize_face(self):
+        frame = self.get_frame()
         result = self.face_recognizer(frame)
         if result == 'others':
             return
         self.emotion = result
         self.facial_expressions[result] += 1
+        return result
 
     def get_facial_list(self):
         sorted(self.facial_expressions.items(), key=lambda x: x[1], reverse=True)
+
+    def recognize_gesture(self):
+        frame = self.get_frame()
+        return get_thumb(frame)
+
+    def video_frame(self, mosaic=False):
+        _, frame = self.camera.read()
+        while True:
+            _, frame = self.camera.read()
+            if not _:
+                break
+            thumb = self.recognize_gesture()
+            cv2.putText(frame, thumb, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+            emotion = self.recognize_face()
+            cv2.putText(frame, emotion, (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+            _, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+            asyncio.sleep(0.1)

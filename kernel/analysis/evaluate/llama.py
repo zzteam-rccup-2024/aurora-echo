@@ -2,10 +2,15 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 from kernel.config import device
 
-model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
+model_id = "data/models/meta-llama/Meta-Llama-3-8B-Instruct"
+
+if device == torch.device('mps'):
+    device = torch.device('cpu')
+    # Llama-3-8B-Instruct doesn't support MPS
+
 
 def send_to_llama_offline(prompt):
-    tokenizer = AutoTokenizer.from_pretrained(f"data/models/{model_name}")
+    tokenizer = AutoTokenizer.from_pretrained(model_id)
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
         torch_dtype=torch.bfloat16,
@@ -25,7 +30,7 @@ def send_to_llama_offline(prompt):
 
     outputs = model.generate(
         input_ids,
-        max_new_tokens=256,
+        max_new_tokens=128,
         eos_token_id=terminators,
         do_sample=True,
         temperature=0.6,

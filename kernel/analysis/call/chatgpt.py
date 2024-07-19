@@ -33,8 +33,8 @@ def generate_prompt(target, config: GeneratePromptConfig):
     return prompt
 
 
-def send_to_chatgpt(prompt, model = "gpt-3.5-turbo"):
+def send_to_chatgpt(prompt, model="gpt-3.5-turbo"):
     return client.chat.completions.create(
         model=model,
         messages=prompt,
-    )
+    ).choices[0].message.content
