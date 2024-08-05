@@ -165,3 +165,5 @@ data
 .data
 
 config.py
+
+.idea

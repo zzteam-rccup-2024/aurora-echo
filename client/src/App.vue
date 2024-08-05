@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { start_record, get_value } from '@/plugins/apis'
 import {
   ElContainer,
   ElHeader,
   ElMain,
-  ElFooter,
   ElImage,
   ElAside,
 } from 'element-plus'
