@@ -33,7 +33,7 @@ const { started, text, sentiment, entities, emotions } = toRefs(emotionStore)
         <ElStatistic v-for="emotion in emotions" :key="emotion[0]" :title="emotion[0]" v-model="emotion[1]" />
       </ElFormItem>
       <ElFormItem>
-        <ElButton type="primary" @click="router.push('/llm')">Recognize</ElButton>
+        <ElButton type="primary" @click="router.push('/llm')" class="w-full" bg text>Recognize</ElButton>
       </ElFormItem>
     </ElForm>
   </ElCard>

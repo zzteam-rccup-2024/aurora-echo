@@ -22,13 +22,16 @@ export async function get_llm(perspective: 'object' | 'subject') {
 }
 
 export async function set_llm(product: string) {
-  return await axios('http://localhost:8000/llm/product', {
-    method: 'POST'
+  return axios('http://localhost:8000/llm/product', {
+    method: 'POST',
+    data: {
+      product
+    }
   })
 }
 
 export async function set_mosaic(mosaic: boolean) {
-  return await axios('http://localhost:8000/mosaic', {
+  return axios('http://localhost:8000/mosaic', {
     method: 'POST',
     data: {
       mosaic

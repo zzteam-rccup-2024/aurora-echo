@@ -8,23 +8,10 @@ import threading
 from kernel.text.sentiment.predict import predict_sentiment
 from kernel.text.sentiment.train import load_sentiment_model
 from kernel.text.entity import recognize_entities
-from kernel.analysis.call.chatgpt import send_to_chatgpt, generate_prompt
-from kernel.analysis.call.llama import send_to_llama_online
-from kernel.analysis.call.baidu import send_to_qianfan
-from kernel.analysis.evaluate.llama import send_to_llama_offline
-from kernel.analysis.evaluate.qwen import send_to_qwen_offline
-
-
-class LLMChoice(Enum):
-    Llama_online = 'Llama-3-70B-Instruct', send_to_llama_online
-    Llama_offline = 'Llama-3-8B-Instruct', send_to_llama_offline
-    ChatGPT_online = 'chatgpt-3.5-turbo', send_to_chatgpt
-    Qwen_offline = 'Qwen2-1.5B-Instruct', send_to_qwen_offline
-    Ernie_online = 'ERNIE-4.0-8K-latest', send_to_qianfan
+from kernel.analysis.index import LargeLanguageModel, GeneratePromptConfig
 
 
 class AuroraEchoConfig(BaseModel):
-    model: LLMChoice
     mosaic: bool
 
 
@@ -36,19 +23,18 @@ class VisualReaction(BaseModel):
 class AuroraEchoProvider:
     def __init__(self, camera: CameraManager, config: AuroraEchoConfig):
         self.camera = camera
-        self.model = config.model
         self.apply_mosaic = config.mosaic
         self.recognizing = False
         self.text = ''
         self.sentiment = 0
         self.named_entities = []
-        self.recognize_thread: threading.Thread = None
+        self.recognize_thread: threading.Thread | None = None
         load_sentiment_model()
-        self.call_llm = self.model.value[1]
+        self.model = LargeLanguageModel()
         self.product_desc = ''
         self.object_analysis = ''
         self.subject_analysis = ''
-        self.llm_thread: threading.Thread = None
+        self.llm_thread: threading.Thread | None = None
         self.generating = False
 
     def recognize_audio(self):
@@ -78,20 +64,15 @@ class AuroraEchoProvider:
         self.recognize_thread.join()
         self.recognizing = False
 
-    def integrate_llm(self, target):
+    def integrate_llm(self, model, target):
         self.generating = True
         desc = open('static/openai/product_desc.txt', 'r').read()
         reaction = VisualReaction(thumbs=self.camera.thumbs, emotions=self.camera.get_facial_list())
         visual = f"Thumbs: up {reaction.thumbs['up']} times, down {reaction.thumbs['down']} times\n" \
                  f"Emotions: {'>'.join(reaction.emotions)}"
-        prompt = generate_prompt(target, {
-            'named_entity': self.named_entities,
-            'expression': visual,
-            'sentiment': self.sentiment,
-            'feedback': self.text,
-            'product_desc': desc
-        })
-        result = self.call_llm(prompt)
+        config = GeneratePromptConfig(named_entity=self.named_entities, expression=visual, sentiment=self.sentiment,
+                                      feedback=self.text, product_desc=desc)
+        result = self.model(model, target, config)
         self.generating = False
         return result
 
@@ -105,7 +86,8 @@ class AuroraEchoProvider:
         self.subject_analysis = subject_comment
         return subject_comment
 
-    def start_llm(self, target):
+    def start_llm(self, target, model):
+        self.model.switch(model)
         self.llm_thread = threading.Thread(target=self.call_llm_object if target == 'object' else self.call_llm_subject)
         self.llm_thread.start()
 
@@ -119,18 +101,6 @@ class AuroraEchoProvider:
             return self.subject_analysis
         else:
             return 'Invalid target'
-
-    def set_llm(self, choice: str):
-        if choice == 'llama_online':
-            self.call_llm = send_to_llama_online
-        elif choice == 'llama_offline':
-            self.call_llm = send_to_llama_offline
-        elif choice == 'chatgpt_online':
-            self.call_llm = send_to_chatgpt
-        elif choice == 'qwen_offline':
-            self.call_llm = send_to_qwen_offline
-        elif choice == 'ernie_online':
-            self.call_llm = send_to_qianfan
 
     def set_mosaic(self, mosaic: bool):
         self.apply_mosaic = mosaic

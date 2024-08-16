@@ -6,7 +6,7 @@ import socketio
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 from kernel.camera.manager import CameraManager
-from kernel.provider import AuroraEchoConfig, AuroraEchoProvider, LLMChoice
+from kernel.provider import AuroraEchoConfig, AuroraEchoProvider
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -14,7 +14,7 @@ app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_credentials=True, allow_methods=['*'],
                    allow_headers=['*'])
 camera = CameraManager()
-config = AuroraEchoConfig(model=LLMChoice.Llama_online, mosaic=True)
+config = AuroraEchoConfig(mosaic=True)
 provider = AuroraEchoProvider(camera, config)
 sio = socketio.Server(cors_allowed_origins='*')
 sio_asgi_app = socketio.ASGIApp(socketio_server=sio, other_asgi_app=app)
@@ -56,9 +56,9 @@ async def named_entities():
 
 
 @app.post('/llm')
-async def llm():
-    provider.start_llm('object')
-    provider.start_llm('subject')
+async def llm(model: str):
+    provider.start_llm('object', model)
+    provider.start_llm('subject', model)
 
 
 @app.get('/llm/object')
@@ -77,18 +77,13 @@ class Product(BaseModel):
     product: str
 
 
-@app.post('/llm/product')
-async def llm_product(product: str):
-    provider.set_llm(product)
-
-
 class Mosaic(BaseModel):
     mosaic: bool
 
 
 @app.post('/mosaic')
 async def config_mosaic(mosaic: Mosaic):
-    provider.set_mosaic(mosaic)
+    provider.set_mosaic(mosaic.mosaic)
     print(provider.apply_mosaic)
 
 

@@ -1,10 +1,10 @@
 from pydantic import BaseModel
 import json
-from chatgpt import ChatGPT
-from claude import Claude
-from llama import Llama
-from qwen import Qwen
-from mistral_ai import MistralAI
+from kernel.analysis.chatgpt import ChatGPT
+from kernel.analysis.claude import Claude
+from kernel.analysis.llama import Llama
+from kernel.analysis.qwen import Qwen
+from kernel.analysis.mistral_ai import MistralAI
 
 
 class GeneratePromptConfig(BaseModel):
@@ -15,8 +15,17 @@ class GeneratePromptConfig(BaseModel):
     product_desc: str
 
 
+class GeneratedJsonSchema(BaseModel):
+    rate: int
+    best: str
+    worst: str
+    date_utc: str
+    original: str
+
+
 class LargeLanguageModel:
     def __init__(self):
+        self.model = None
         self.overall = open('static/openai/overall.txt', 'r').read()
         self.object = open('static/openai/object.txt', 'r').read()
         self.subject = open('static/openai/subject.txt', 'r').read()
@@ -46,18 +55,22 @@ class LargeLanguageModel:
 
         return prompt
 
-    def __call__(self, model, target, config: GeneratePromptConfig):
+    def switch(self, model):
+        self.model = model
+
+    def __call__(self, target, config: GeneratePromptConfig):
         prompt = self.generate_prompt(target, config)
-        if model == 'chatgpt':
+        if target == 'json':
+            return ChatGPT().json(prompt, GeneratedJsonSchema)
+        elif self.model == 'chatgpt':
             return ChatGPT().message(prompt)
-        elif model == 'claude':
+        elif self.model == 'claude':
             return Claude().message(prompt)
-        elif model == 'llama':
+        elif self.model == 'llama':
             return Llama().message(prompt)
-        elif model == 'qwen':
+        elif self.model == 'qwen':
             return Qwen().message(prompt)
-        elif model == 'mistral':
+        elif self.model == 'mistral':
             return MistralAI().message(prompt)
         else:
             raise ValueError('model must be either "chatgpt", "claude", "llama", "qwen", or "mistral"')
-

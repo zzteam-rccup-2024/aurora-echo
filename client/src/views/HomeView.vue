@@ -23,11 +23,11 @@ const emotion = useEmotionStore()
 const router = useRouter()
 
 const models = [
-  { label: 'gpt-4o', value: 'chatgpt-online', badge: ['chatgpt', 'online'] },
-  { label: 'claude-3.5-sonnet', value: 'claude-online', badge: ['claude', 'online'] },
-  { label: 'mistral-ai', value: 'mistral-online', badge: ['mistral', 'online'] },
-  { label: 'Llama-3.1-8B-Instruct', value: 'llama-offline', badge: ['llama', 'offline'] },
-  { label: 'Qwen2-1.5B-Instruct', value: 'qwen-offline', badge: ['qwen', 'offline'] },
+  { label: 'GPT-4o', value: 'chatgpt', badge: ['chatgpt', 'online'] },
+  { label: 'Claude 3.5 Sonnet', value: 'claude', badge: ['claude', 'online'] },
+  { label: 'Mistral AI', value: 'mistral', badge: ['mistral', 'online'] },
+  { label: 'Llama 3.1', value: 'llama', badge: ['llama', 'offline'] },
+  { label: 'Qwen 2', value: 'qwen', badge: ['qwen', 'offline'] }
 ]
 
 const model = ref('llama-offline')
@@ -45,6 +45,17 @@ watch(mosaic, async () => {
 watch(model, async () => {
   await set_llm(model.value)
 })
+
+const colors = {
+  // According to the similar color of the product
+  'chatgpt': 'success',
+  'claude': 'danger',
+  'mistral': 'warning',
+  'llama': undefined,
+  'qwen': 'info',
+  'online': 'warning',
+  'offline': 'success'
+} as Record<string, 'success' | 'warning' | 'danger' | 'info' | undefined>
 </script>
 
 <template>
@@ -58,8 +69,8 @@ watch(model, async () => {
               <ElRadioGroup v-model="model">
                 <ElRadio v-for="item in models" :key="item.value" :label="item.value" border>
                   {{ item.label }}
-                  <ElTag v-for="tag in item.badge" :key="tag.toString()" type="success" effect="plain"
-                         size="small">
+                  <ElTag v-for="tag in item.badge" :key="tag.toString()" :type="tag in colors ? colors[tag.toString()] : undefined" effect="plain"
+                         size="small" class="px-1">
                     {{ tag }}
                   </ElTag>
                 </ElRadio>
