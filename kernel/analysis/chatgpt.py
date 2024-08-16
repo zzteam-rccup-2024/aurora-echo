@@ -43,7 +43,7 @@ class ChatGPT:
         return self.openai.chat.completions.create(
             model=self.model,
             messages=messages
-        ).choices[0]
+        ).choices[0].message.content
 
     def json(self, messages, schema):
         return self.openai.beta.chat.completions.parse(

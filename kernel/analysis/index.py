@@ -31,7 +31,7 @@ class LargeLanguageModel:
         self.subject = open('static/openai/subject.txt', 'r').read()
         self.json = open('static/openai/json.txt', 'r').read()
 
-    def generate_prompt(self, target, config: GeneratePromptConfig):
+    def generate_prompt(self, target, config: GeneratePromptConfig, single: bool):
         if target != 'object' and target != 'subject' and target != 'json':
             raise ValueError('target must be either "object", "subject", or "json"')
 
@@ -51,7 +51,7 @@ class LargeLanguageModel:
         prompt = [
             {"role": "system", "content": overall_prompt},
             {"role": "user", "content": user_prompt}
-        ]
+        ] if single else [{"role": "user", 'content': f"{overall_prompt}\n\n{user_prompt}"}]
 
         return prompt
 
@@ -59,7 +59,7 @@ class LargeLanguageModel:
         self.model = model
 
     def __call__(self, target, config: GeneratePromptConfig):
-        prompt = self.generate_prompt(target, config)
+        prompt = self.generate_prompt(target, config, single=self.model == 'claude')
         if target == 'json':
             return ChatGPT().json(prompt, GeneratedJsonSchema)
         elif self.model == 'chatgpt':

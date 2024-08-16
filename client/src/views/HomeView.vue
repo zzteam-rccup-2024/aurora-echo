@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { start_record, set_llm, set_mosaic } from '@/plugins/apis'
+import { start_record } from '@/plugins/apis'
 import {
   ElRow,
   ElCol,
@@ -13,14 +13,12 @@ import {
   ElSwitch,
   ElImage
 } from 'element-plus'
-import { ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
 import AEAnalysis from '@/components/AEAnalysis.vue'
 import { useEmotionStore } from '@/stores/emotion'
+import { useSettingsStore } from '@/stores/settings'
 
 const emotion = useEmotionStore()
-
-const router = useRouter()
+const settings = useSettingsStore()
 
 const models = [
   { label: 'GPT-4o', value: 'chatgpt', badge: ['chatgpt', 'online'] },
@@ -30,21 +28,10 @@ const models = [
   { label: 'Qwen 2', value: 'qwen', badge: ['qwen', 'offline'] }
 ]
 
-const model = ref('llama-offline')
-const mosaic = ref(false)
-
 async function call_recognition() {
   emotion.started = true
   await start_record()
 }
-
-watch(mosaic, async () => {
-  await set_mosaic(mosaic.value)
-})
-
-watch(model, async () => {
-  await set_llm(model.value)
-})
 
 const colors = {
   // According to the similar color of the product
@@ -66,7 +53,7 @@ const colors = {
           <p class="text-center">Configuration</p>
           <ElForm>
             <ElFormItem label="Model">
-              <ElRadioGroup v-model="model">
+              <ElRadioGroup v-model="settings.llm">
                 <ElRadio v-for="item in models" :key="item.value" :label="item.value" border>
                   {{ item.label }}
                   <ElTag v-for="tag in item.badge" :key="tag.toString()" :type="tag in colors ? colors[tag.toString()] : undefined" effect="plain"
@@ -77,7 +64,7 @@ const colors = {
               </ElRadioGroup>
             </ElFormItem>
             <ElFormItem label="Mosaic">
-              <ElSwitch v-model="mosaic" active-text="On" inactive-text="Off" />
+              <ElSwitch v-model="settings.mosaic" active-text="On" inactive-text="Off" />
             </ElFormItem>
             <ElFormItem style="text-align: right">
               <ElButton v-if="!emotion.started" text bg type="primary" class="w-full" @click="call_recognition">Start

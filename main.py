@@ -55,7 +55,7 @@ async def named_entities():
                                                                                                    'data': provider.named_entities}
 
 
-@app.post('/llm')
+@app.post('/llm/{model}')
 async def llm(model: str):
     provider.start_llm('object', model)
     provider.start_llm('subject', model)

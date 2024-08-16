@@ -4,16 +4,18 @@ import { ElSegmented, ElScrollbar, ElRow, ElCol } from 'element-plus'
 import AEAnalysis from '@/components/AEAnalysis.vue'
 import { start_llm, get_llm } from '@/plugins/apis'
 import compileMarkdownToHTML from '@/plugins/markdown'
-import { useWindowSize} from '@vueuse/core'
-
-onMounted(() => {
-  start_llm()
-})
+import { useWindowSize } from '@vueuse/core'
+import { useSettingsStore } from '@/stores/settings'
 
 const perspectives = ['Service Provider', 'Customer']
-const { width, height } = useWindowSize()
+const { height } = useWindowSize()
 const perspective = ref('Custormer')
 const loaded = ref(false)
+const settings = useSettingsStore()
+
+onMounted(() => {
+  start_llm(settings.llm)
+})
 
 const interval = setInterval(async () => {
   if ((await get_llm('object')).status === 'success') {

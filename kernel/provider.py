@@ -64,7 +64,7 @@ class AuroraEchoProvider:
         self.recognize_thread.join()
         self.recognizing = False
 
-    def integrate_llm(self, model, target):
+    def integrate_llm(self, target):
         self.generating = True
         desc = open('static/openai/product_desc.txt', 'r').read()
         reaction = VisualReaction(thumbs=self.camera.thumbs, emotions=self.camera.get_facial_list())
@@ -72,7 +72,7 @@ class AuroraEchoProvider:
                  f"Emotions: {'>'.join(reaction.emotions)}"
         config = GeneratePromptConfig(named_entity=self.named_entities, expression=visual, sentiment=self.sentiment,
                                       feedback=self.text, product_desc=desc)
-        result = self.model(model, target, config)
+        result = self.model(target, config)
         self.generating = False
         return result
 

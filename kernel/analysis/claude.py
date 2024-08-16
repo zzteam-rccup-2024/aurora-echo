@@ -14,17 +14,25 @@ candidate = [
 
 class Claude:
     def __init__(self):
-        if data['anthropic']['api_key'] == '':
+        if data['anthropic']['key'] == '':
             raise ValueError('Anthropic API key not found. Please add your Anthropic API key in config.json')
-        self.api_key = data['anthropic']['api_key']
+        self.api_key = data['anthropic']['key']
         self.model = data['anthropic']['model']
         if self.model not in candidate:
             self.model = 'claude-3-5-sonnet-20240620'
-        self.base_url = data['anthropic']['base_url']
-        self.anthropic = Anthropic(api_key=self.api_key, base_url=self.base_url)
+        self.anthropic = Anthropic(api_key=self.api_key)
 
     def message(self, messages):
-        return self.anthropic.completions.create(
+        contents = self.anthropic.messages.create(
             model=self.model,
-            messages=messages
-        ).choices[0]
+            messages=messages,
+            max_tokens=1024
+        ).content
+
+        result = ''
+
+        for content in contents:
+            if content.type == 'text':
+                result += content.text + '\n'
+
+        return result
