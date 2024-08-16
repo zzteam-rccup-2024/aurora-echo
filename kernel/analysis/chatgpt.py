@@ -1,6 +1,5 @@
 from openai import OpenAI
 from config import data
-from pydantic import BaseModel
 
 candidate = [
     "gpt-4o",
@@ -32,14 +31,13 @@ candidate = [
 
 class ChatGPT:
     def __init__(self):
-        if data['openai']['api_key'] == '':
+        if data['openai']['key'] == '':
             raise ValueError('OpenAI API key not found. Please add your OpenAI API key in config.json')
-        self.api_key = data['openai']['api_key']
+        self.api_key = data['openai']['key']
         self.model = data['openai']['model']
         if self.model not in candidate:
             self.model = 'gpt-4o-2024-08-06'
-        self.base_url = data['openai']['base_url']
-        self.openai = OpenAI(api_key=self.api_key, base_url=self.base_url)
+        self.openai = OpenAI(api_key=self.api_key)
 
     def message(self, messages):
         return self.openai.chat.completions.create(
@@ -47,9 +45,9 @@ class ChatGPT:
             messages=messages
         ).choices[0]
 
-    def json(self, messages, schema: BaseModel):
+    def json(self, messages, schema):
         return self.openai.beta.chat.completions.parse(
             model=self.model,
             messages=messages,
-            response_format=schema
-        ).choices[0]
+            response_format=schema,
+        )

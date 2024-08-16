@@ -1,1 +1,3 @@
 According to the user's feedback: {{ feedback }}, please generate a short report of the product to the resource provider to improve the service.
+Don't seek users' feedback in the report, just provide a report of the product, and don't collect ANY of the user's personal information.
+Please also tip the level of the feedback, summarize the product's advantage and disadvantage, and provide a suggestion for improvement.

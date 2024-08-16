@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { start_record, get_value, set_llm, set_mosaic } from '@/plugins/apis'
+import { start_record, set_llm, set_mosaic } from '@/plugins/apis'
 import {
-  ElRate,
   ElRow,
   ElCol,
   ElButton,
@@ -24,11 +23,11 @@ const emotion = useEmotionStore()
 const router = useRouter()
 
 const models = [
-  { label: 'Llama-3-8B-Instruct', value: 'llama-offline', badge: ['llama', 'offline'] },
+  { label: 'gpt-4o', value: 'chatgpt-online', badge: ['chatgpt', 'online'] },
+  { label: 'claude-3.5-sonnet', value: 'claude-online', badge: ['claude', 'online'] },
+  { label: 'mistral-ai', value: 'mistral-online', badge: ['mistral', 'online'] },
+  { label: 'Llama-3.1-8B-Instruct', value: 'llama-offline', badge: ['llama', 'offline'] },
   { label: 'Qwen2-1.5B-Instruct', value: 'qwen-offline', badge: ['qwen', 'offline'] },
-  { label: 'Llama-3-70B-Instruct', value: 'llama-online', badge: ['llama', 'online'] },
-  { label: 'gpt-3.5-turbo', value: 'chatgpt-online', badge: ['chatgpt', 'online'] },
-  { label: 'ERNIE-4.0-8K-Latest', value: 'ernie-online', badge: ['ernie', 'online'] }
 ]
 
 const model = ref('llama-offline')

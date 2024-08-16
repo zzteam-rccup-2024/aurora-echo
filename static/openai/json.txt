@@ -1,0 +1,2 @@
+Now you need to append the data to the database. The data is in the format of a dictionary, and you MUST follow the format.
+The user's feed back is {{ feedback }}, you need to summarize the feedback and store it in the database. You should return a json as the schema first.
