@@ -11,8 +11,9 @@ torchvision==0.18.1
 tqdm==4.66.4
 transformers==4.42.4
 Wave==0.0.2
-qianfan==0.4.1.2
-openai==1.35.14
+openai==1.40.0
+mistralai==1.0.1
+anthropic==0.34.0
 fastapi==0.111.1
 pydantic==2.8.2
 requests==2.32.3

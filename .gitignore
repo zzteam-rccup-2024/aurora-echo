@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+config.yml
+
 # C extensions
 *.so
 
@@ -167,5 +169,3 @@ data
 config.py
 
 .idea
-
-./config.yaml
