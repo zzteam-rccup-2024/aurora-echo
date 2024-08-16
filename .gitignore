@@ -167,3 +167,5 @@ data
 config.py
 
 .idea
+
+./config.yaml

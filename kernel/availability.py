@@ -1,6 +1,5 @@
 import requests
 
-# lower than 25 in the Internet Freedom Index or OpenAI API is not available
 unsupported_areas = ['CN', 'CU', 'RU', 'KP', 'IR', 'VN', 'VE', 'MM']
 
 
