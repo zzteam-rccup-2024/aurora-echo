@@ -13,7 +13,7 @@ class Wav2Vec:
         self.model = self.model.to(device)
         print('Recognizer initialized')
 
-    def recognize(self, audio: np.ndarray) -> str:
+    def __call__(self, audio: np.ndarray) -> str:
         inputs = self.processor(audio, return_tensors="pt", sampling_rate=16000).input_values.float().to(device)
         with torch.no_grad():
             logits = self.model(inputs).logits

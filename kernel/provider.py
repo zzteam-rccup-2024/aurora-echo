@@ -74,7 +74,7 @@ class AuroraEchoProvider:
                  f"Emotions: {'>'.join(reaction.emotions)}"
         config = GeneratePromptConfig(named_entity=self.named_entities, expression=visual, sentiment=self.sentiment,
                                       feedback=self.text, product_desc=desc)
-        result = self.model(target, config)
+        result = self.language_model(target, config)
         self.generating = False
         return result
 
@@ -89,7 +89,7 @@ class AuroraEchoProvider:
         return subject_comment
 
     def start_llm(self, target, model):
-        self.model.switch(model)
+        self.language_model.switch(model)
         self.llm_thread = threading.Thread(target=self.call_llm_object if target == 'object' else self.call_llm_subject)
         self.llm_thread.start()
 

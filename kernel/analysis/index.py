@@ -5,7 +5,7 @@ from kernel.analysis.claude import Claude
 from kernel.analysis.llama import Llama
 from kernel.analysis.qwen import Qwen
 from kernel.analysis.mistral_ai import MistralAI
-from utils import StructureSchema
+from kernel.analysis.utils import StructureSchema
 
 
 class GeneratePromptConfig(BaseModel):

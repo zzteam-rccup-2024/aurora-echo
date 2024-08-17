@@ -14,7 +14,7 @@ class Whisper:
             self.base_url = None
         self.openai = OpenAI(api_key=self.api_key, base_url=self.base_url)
 
-    def recognize(self, audio_path: str):
+    def __call__(self, audio_path: str):
         file = open(audio_path, 'rb')
         return self.openai.audio.transcriptions.create(
             model=self.model,
