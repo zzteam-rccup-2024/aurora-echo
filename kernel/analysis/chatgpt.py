@@ -30,14 +30,16 @@ candidate = [
 
 
 class ChatGPT:
-    def __init__(self):
-        if data['openai']['key'] == '':
+    def __init__(self, field: str = 'openai'):
+        if data[field]['key'] == '':
             raise ValueError('OpenAI API key not found. Please add your OpenAI API key in config.json')
-        self.api_key = data['openai']['key']
-        self.model = data['openai']['model']
-        if self.model not in candidate:
-            self.model = 'gpt-4o-2024-08-06'
-        self.openai = OpenAI(api_key=self.api_key)
+        self.api_key = data[field]['key']
+        self.model = data[field]['model']
+        if 'base_url' in data[field]:
+            self.base_url = data[field]['base_url']
+        else:
+            self.base_url = None
+        self.openai = OpenAI(api_key=self.api_key, base_url=self.base_url)
 
     def message(self, messages):
         return self.openai.chat.completions.create(
@@ -50,4 +52,4 @@ class ChatGPT:
             model=self.model,
             messages=messages,
             response_format=schema,
-        )
+        ).choices[0].message.content

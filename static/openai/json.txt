@@ -1,2 +1,10 @@
-Now you need to append the data to the database. The data is in the format of a dictionary, and you MUST follow the format.
-The user's feed back is {{ feedback }}, you need to summarize the feedback and store it in the database. You should return a json as the schema first.
+Now you need to append the data to the database. The data is provided in the format of a dictionary, and it is crucial that you adhere strictly to this format.
+
+The user's feedback is {{ feedback }}. Your task is to summarize the feedback and store the summary in the database. Begin by returning a JSON schema that defines the structure of the data to be stored.
+
+Additionally, be mindful of the following details, but do not make assumptions about the user's feedback. Do not include references to discrimination.
+- The language used in the feedback
+- The user's approximate race or ethnicity (use nationality if relevant)
+- The user's gender (including LGBTQ+ identities)
+- The user's occupation
+- The user's approximate age (please range it with 0-12, 13-18, 19-25, 26-35, 36-50, 51-65, 66+)

@@ -1,9 +1,7 @@
-import cv2
 from pydantic import BaseModel
-from enum import Enum
 from kernel.camera.manager import CameraManager
+from kernel.speech.index import SpeechToTextModel
 from kernel.speech.record import record_audio, save_to_wav
-from kernel.speech.recognize import recognize_audio
 import threading
 from kernel.text.sentiment.predict import predict_sentiment
 from kernel.text.sentiment.train import load_sentiment_model
@@ -30,20 +28,24 @@ class AuroraEchoProvider:
         self.named_entities = []
         self.recognize_thread: threading.Thread | None = None
         load_sentiment_model()
-        self.model = LargeLanguageModel()
+        self.language_model = LargeLanguageModel()
+        self.recognition_model = SpeechToTextModel()
         self.product_desc = ''
         self.object_analysis = ''
         self.subject_analysis = ''
         self.llm_thread: threading.Thread | None = None
         self.generating = False
 
-    def recognize_audio(self):
+    def recognize_audio(self, model: str = 'whisper'):
         try:
             self.recognizing = True
             audio = record_audio()
-            recognised = recognize_audio(audio)
-            save_to_wav(audio)
-            self.text = recognised
+            self.recognition_model.switch(model)
+            name = save_to_wav(audio)
+            if model == 'whisper':
+                self.text = self.recognition_model(name)
+            else:
+                self.text = self.recognition_model(audio)
         finally:
             self.recognizing = False
             self.named_entities = recognize_entities(self.text)

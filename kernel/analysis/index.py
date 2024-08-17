@@ -5,6 +5,7 @@ from kernel.analysis.claude import Claude
 from kernel.analysis.llama import Llama
 from kernel.analysis.qwen import Qwen
 from kernel.analysis.mistral_ai import MistralAI
+from utils import StructureSchema
 
 
 class GeneratePromptConfig(BaseModel):
@@ -13,14 +14,6 @@ class GeneratePromptConfig(BaseModel):
     sentiment: float
     feedback: str
     product_desc: str
-
-
-class GeneratedJsonSchema(BaseModel):
-    rate: int
-    best: str
-    worst: str
-    date_utc: str
-    original: str
 
 
 class LargeLanguageModel:
@@ -61,9 +54,13 @@ class LargeLanguageModel:
     def __call__(self, target, config: GeneratePromptConfig):
         prompt = self.generate_prompt(target, config, single=self.model == 'claude')
         if target == 'json':
-            return ChatGPT().json(prompt, GeneratedJsonSchema)
+            return ChatGPT().json(prompt, schema=StructureSchema)
         elif self.model == 'chatgpt':
-            return ChatGPT().message(prompt)
+            return ChatGPT('openai').message(prompt)
+        elif self.model == 'deepseek':
+            return ChatGPT('deepseek').message(prompt)
+        elif self.model == 'chatgpt-proxied':
+            return ChatGPT('openai-proxied').message(prompt)
         elif self.model == 'claude':
             return Claude().message(prompt)
         elif self.model == 'llama':

@@ -1,7 +1,7 @@
 import time
 import numpy as np
 import pyaudio
-from kernel.speech.config import FORMAT, CHANNELS, RATE, CHUNK, SILENCE_THRESHOLD, SILENCE_DURATION
+from kernel.speech.meta import FORMAT, CHANNELS, RATE, CHUNK, SILENCE_THRESHOLD, SILENCE_DURATION
 from kernel.speech.utils import db_level
 import wave
 from datetime import datetime
@@ -46,3 +46,4 @@ def save_to_wav(audio):
         wf.setsampwidth(pyaudio.PyAudio().get_sample_size(FORMAT))
         wf.setframerate(RATE)
         wf.writeframes(audio.tobytes())
+        return filename

@@ -1,3 +1,10 @@
-According to the user's feedback: {{ feedback }}, please generate a short report of the product to the resource provider to improve the service.
-Don't seek users' feedback in the report, just provide a report of the product, and don't collect ANY of the user's personal information.
-Please also tip the level of the feedback, summarize the product's advantage and disadvantage, and provide a suggestion for improvement.
+Based on the user's feedback: {{ feedback }}, please generate a concise report on the product for the resource provider to enhance the service.
+
+In the report:
+- Focus solely on the product's performance.
+- Avoid collecting or mentioning any personal information about the user.
+- Include an assessment of the feedback level (e.g., positive, neutral, negative).
+- Summarize the product's strengths and weaknesses.
+- Provide actionable suggestions for improvement.
+
+Ensure that your report is written in clear and professional English. You can translate the original feedback and append it to the report for reference. The report should be approximately 200-300 words in length.

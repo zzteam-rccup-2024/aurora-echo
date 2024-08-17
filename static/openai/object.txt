@@ -1,2 +1,5 @@
-Now it's your turn to answer the user feedback: {{ feedback }}. Please be polite and professional. Imagine that you are the maintainer of the service, and the user is your customer. You need to provide a response to the user's feedback. The response should be in a positive and professional manner.
-Suppose that you are writing a letter for feedback, for approximately 120 letters.
+Now it’s your turn to respond to the user feedback: {{ feedback }}.
+
+Please craft your response in a polite and professional tone. Imagine that you are the maintainer of the service, and the user is your valued customer. Your response should reflect a positive and professional attitude, aligning with the tone and language used in the feedback.
+
+Write your response as if you were composing a brief letter, aiming for approximately 120 characters. Ensure your language mirrors the style of the feedback to create a cohesive and engaging reply. Please do not include any personal information about the user in your response.
