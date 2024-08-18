@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-import json
+from kernel.availability import check_availability
 from kernel.analysis.chatgpt import ChatGPT
 from kernel.analysis.claude import Claude
 from kernel.analysis.llama import Llama
@@ -7,11 +7,16 @@ from kernel.analysis.qwen import Qwen
 from kernel.analysis.mistral_ai import MistralAI
 from kernel.analysis.utils import StructureSchema
 
+availability = check_availability()
+if not availability:
+    print(
+        'WARN: The official OpenAI service is not in your country. You can not access to the Structured Output & '
+        'Database Query features.'
+    )
+
 
 class GeneratePromptConfig(BaseModel):
-    named_entity: list[tuple[str, str]]
     expression: str
-    sentiment: float
     feedback: str
     product_desc: str
 
@@ -29,12 +34,7 @@ class LargeLanguageModel:
             raise ValueError('target must be either "object", "subject", or "json"')
 
         overall_prompt = (self.overall.replace(
-            '{{ named_entity }}',
-            json.dumps(config.named_entity)
-        ).replace(
             '{{ expression }}', config.expression
-        ).replace(
-            '{{ sentiment }}', str(config.sentiment)
         ).replace(
             '{{ product_desc }}', str(config.product_desc)
         ))
@@ -53,21 +53,22 @@ class LargeLanguageModel:
 
     def __call__(self, target, config: GeneratePromptConfig):
         prompt = self.generate_prompt(target, config, single=self.model == 'claude')
-        if target == 'json':
-            return ChatGPT().json(prompt, schema=StructureSchema)
+        if target == 'json' and availability:
+            # Only official OpenAI API (2024-08-06) supports the structured output feature.
+            return ChatGPT('openai').json(prompt, schema=StructureSchema)
         elif self.model == 'chatgpt':
-            return ChatGPT('openai').message(prompt)
+            return ChatGPT('openai' if availability else 'burn-hair').message(prompt)
         elif self.model == 'deepseek':
             return ChatGPT('deepseek').message(prompt)
-        elif self.model == 'chatgpt-proxied':
-            return ChatGPT('openai-proxied').message(prompt)
-        elif self.model == 'claude':
+        elif self.model == 'burn-hair':
+            return ChatGPT('burn-hair').message(prompt)
+        elif self.model == 'claude' and availability:
             return Claude().message(prompt)
         elif self.model == 'llama':
             return Llama().message(prompt)
         elif self.model == 'qwen':
             return Qwen().message(prompt)
-        elif self.model == 'mistral':
+        elif self.model == 'mistral' and availability:
             return MistralAI().message(prompt)
         else:
             raise ValueError('model must be either "chatgpt", "claude", "llama", "qwen", or "mistral"')

@@ -10,8 +10,8 @@ import {
   ElRadioGroup,
   ElCard,
   ElTag,
-  ElSwitch,
-  ElImage
+  ElImage,
+  ElSegmented
 } from 'element-plus'
 import AEAnalysis from '@/components/AEAnalysis.vue'
 import { useEmotionStore } from '@/stores/emotion'
@@ -64,7 +64,7 @@ const colors = {
               </ElRadioGroup>
             </ElFormItem>
             <ElFormItem label="Mosaic">
-              <ElSwitch v-model="settings.mosaic" active-text="On" inactive-text="Off" />
+              <ElSegmented v-model="settings.mosaic" :options="['mosaic', 'blur', 'none']" ></ElSegmented>
             </ElFormItem>
             <ElFormItem style="text-align: right">
               <ElButton v-if="!emotion.started" text bg type="primary" class="w-full" @click="call_recognition">Start
@@ -79,7 +79,7 @@ const colors = {
     </ElCol>
     <ElCol :span="1"></ElCol>
     <ElCol :span="15">
-      <ElImage src="http://localhost:8000/camera" />
+      <ElImage :src="'http://localhost:8000/camera/' + settings.mosaic" />
     </ElCol>
   </ElRow>
 </template>

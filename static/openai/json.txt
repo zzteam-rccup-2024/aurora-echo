@@ -8,3 +8,5 @@ Additionally, be mindful of the following details, but do not make assumptions a
 - The user's gender (including LGBTQ+ identities)
 - The user's occupation
 - The user's approximate age (please range it with 0-12, 13-18, 19-25, 26-35, 36-50, 51-65, 66+)
+- The user's sentiment (0 - 5 with 3 effective digits).
+- Named entities mentioned in the feedback.

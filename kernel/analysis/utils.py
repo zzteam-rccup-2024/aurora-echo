@@ -18,3 +18,4 @@ class StructureSchema(BaseModel):
     disadvantages: list[str]
     suggestions: list[str]
     date_utc: str
+    sentiment: float

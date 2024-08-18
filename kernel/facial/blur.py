@@ -3,15 +3,14 @@ from cv2.typing import MatLike
 import mediapipe as mp
 
 
-def apply_mosaic(image: MatLike, x: int, y: int, w: int, h: int, size=5):
+def apply_blur(image: MatLike, x: int, y: int, w: int, h: int, size=5):
     sub_face = image[y:y + h, x:x + w]
-    sub_face = cv2.resize(sub_face, (size, size), interpolation=cv2.INTER_LINEAR)
-    sub_face = cv2.resize(sub_face, (w, h), interpolation=cv2.INTER_NEAREST)
+    sub_face = cv2.GaussianBlur(sub_face, (99, 99), 30)
     image[y:y + h, x:x + w] = sub_face
     return image
 
 
-class PerformMosaic:
+class PerformBlur:
     def __init__(self):
         self.mp_face_detection = mp.solutions.face_detection
         self.face_detection = self.mp_face_detection.FaceDetection(model_selection=1,
@@ -26,9 +25,9 @@ class PerformMosaic:
                     bbox_c = detection.location_data.relative_bounding_box
                     ih, iw, _ = image.shape
                     x, y, w, h = int(bbox_c.xmin * iw), int(bbox_c.ymin * ih), int(bbox_c.width * iw), int(bbox_c.height * ih)
-                    image = apply_mosaic(image, x, y, w, h)
+                    image = apply_blur(image, x, y, w, h)
 
             return cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         except:
-            cv2.putText(image, 'Error in performing mosaic', (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+            cv2.putText(image, 'Error in performing blur', (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
             return cv2.cvtColor(image, cv2.COLOR_RGB2BGR)

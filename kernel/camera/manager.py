@@ -3,8 +3,10 @@ import cv2
 from kernel.facial.predict import FacialEmotionRecognizer
 from kernel.gesture.thumb import get_thumb
 from kernel.facial.mosaic import PerformMosaic
+from kernel.facial.blur import PerformBlur
 
-transform = PerformMosaic()
+transform_mosaic = PerformMosaic()
+transform_blur = PerformBlur()
 
 
 class CameraManager:
@@ -49,15 +51,17 @@ class CameraManager:
             self.thumbs['down'] += 1
         return thumb
 
-    def video_frame(self, mosaic=False):
+    def video_frame(self, mosaic: str = 'blur'):
         _, frame = self.camera.read()
         while True:
             _, frame = self.camera.read()
             if not _:
                 break
             thumb = self.recognize_gesture()
-            if mosaic:
-                frame = transform(frame)
+            if mosaic == 'mosaic':
+                frame = transform_mosaic(frame)
+            elif mosaic == 'blur':
+                frame = transform_blur(frame)
             cv2.putText(frame, thumb, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
             emotion = self.recognize_face()
             cv2.putText(frame, emotion, (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
@@ -65,4 +69,3 @@ class CameraManager:
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-            asyncio.sleep(0.1)

@@ -1,7 +1,3 @@
-from kernel.availability import check_availability
-if not check_availability():
-    raise Exception('Aurora Echo is not available in your country, it may be due to the censorship of the Internet, '
-                    'or the unavailability of OpenAI API Service.')
 import socketio
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
@@ -26,9 +22,8 @@ def read_root():
     return {"app_name": "Aurora Echo"}
 
 
-@app.get("/camera")
-async def camera_feed():
-    mosaic = provider.get_mosaic()
+@app.get("/camera/{mosaic}")
+async def camera_feed(mosaic: str = 'blur'):
     return StreamingResponse(camera.video_frame(mosaic=mosaic), media_type='multipart/x-mixed-replace; boundary=frame')
 
 
@@ -59,6 +54,7 @@ async def named_entities():
 async def llm(model: str):
     provider.start_llm('object', model)
     provider.start_llm('subject', model)
+    provider.start_llm('json', model)
 
 
 @app.get('/llm/object')

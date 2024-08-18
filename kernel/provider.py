@@ -3,10 +3,10 @@ from kernel.camera.manager import CameraManager
 from kernel.speech.index import SpeechToTextModel
 from kernel.speech.record import record_audio, save_to_wav
 import threading
-from kernel.text.sentiment.predict import predict_sentiment
+from kernel.availability import check_availability
 from kernel.text.sentiment.train import load_sentiment_model
-from kernel.text.entity import recognize_entities
 from kernel.analysis.index import LargeLanguageModel, GeneratePromptConfig
+from kernel.database.mod import db
 
 
 class AuroraEchoConfig(BaseModel):
@@ -48,8 +48,8 @@ class AuroraEchoProvider:
                 self.text = self.recognition_model(audio)
         finally:
             self.recognizing = False
-            self.named_entities = recognize_entities(self.text)
-            self.sentiment = predict_sentiment(self.text)
+            # self.named_entities = recognize_entities(self.text)
+            # self.sentiment = predict_sentiment(self.text)
 
     def start_recognize(self):
         if self.recognizing:
@@ -72,8 +72,7 @@ class AuroraEchoProvider:
         reaction = VisualReaction(thumbs=self.camera.thumbs, emotions=self.camera.get_facial_list())
         visual = f"Thumbs: up {reaction.thumbs['up']} times, down {reaction.thumbs['down']} times\n" \
                  f"Emotions: {'>'.join(reaction.emotions)}"
-        config = GeneratePromptConfig(named_entity=self.named_entities, expression=visual, sentiment=self.sentiment,
-                                      feedback=self.text, product_desc=desc)
+        config = GeneratePromptConfig(expression=visual, feedback=self.text, product_desc=desc)
         result = self.language_model(target, config)
         self.generating = False
         return result
@@ -88,10 +87,30 @@ class AuroraEchoProvider:
         self.subject_analysis = subject_comment
         return subject_comment
 
+    def call_llm_json(self):
+        if check_availability():
+            import json
+            json_structure: str = self.integrate_llm('json')
+            print(json_structure)
+            struct = json.loads(json_structure)
+            result = db['structured'].insert_one(struct)
+            print(result)
+            return json_structure
+
     def start_llm(self, target, model):
         self.language_model.switch(model)
-        self.llm_thread = threading.Thread(target=self.call_llm_object if target == 'object' else self.call_llm_subject)
-        self.llm_thread.start()
+        target_fn = None
+        if target == 'object':
+            target_fn = self.call_llm_object
+        elif target == 'subject':
+            target_fn = self.call_llm_subject
+        elif target == 'json':
+            target_fn = self.call_llm_json
+        if target_fn:
+            self.llm_thread = threading.Thread(target=target_fn)
+            self.llm_thread.start()
+        else:
+            raise ValueError('target must be either "object", "subject", or "json"')
 
     def interrupt_llm(self):
         self.llm_thread.join()
