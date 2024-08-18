@@ -44,7 +44,7 @@ watch(entered, () => {
 
             </ElCol>
             <ElCol :span="2">
-              <ElImage src="/public/aurora-echo.png" alt="Aurora Echo Logo" />
+              <ElImage src="/aurora-echo.png" alt="Aurora Echo Logo" />
             </ElCol>
             <ElCol :span="13">
               <p
