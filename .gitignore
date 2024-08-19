@@ -166,6 +166,4 @@ cython_debug/
 data
 .data
 
-config.py
-
 .idea
