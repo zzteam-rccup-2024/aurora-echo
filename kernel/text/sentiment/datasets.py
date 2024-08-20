@@ -1,5 +1,4 @@
 # Uses IMDB dataset from torchtext.datasets
-import gc
 import torch
 from torchtext import data, datasets
 import spacy

@@ -12,6 +12,12 @@ First, you need to install requirements:
 pip install -r requirements.txt
 ```
 
+Then you need to install the language library for `spaCy`.
+
+```shell
+python -m spacy download en_core_web_sm
+```
+
 ### Devices
 
 Then, you need to prepare GPUs, including NVIDIA GPUs and CUDA Toolkit, or using MPS by Apple.

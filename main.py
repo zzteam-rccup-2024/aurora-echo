@@ -1,4 +1,3 @@
-import socketio
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 from kernel.camera.manager import CameraManager
@@ -12,9 +11,6 @@ app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_credentials=True, 
 camera = CameraManager()
 config = AuroraEchoConfig(mosaic=True)
 provider = AuroraEchoProvider(camera, config)
-sio = socketio.Server(cors_allowed_origins='*')
-sio_asgi_app = socketio.ASGIApp(socketio_server=sio, other_asgi_app=app)
-app.add_websocket_route("/socket.io/", sio_asgi_app)
 
 
 @app.get("/")

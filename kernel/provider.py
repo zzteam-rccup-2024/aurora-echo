@@ -68,7 +68,7 @@ class AuroraEchoProvider:
 
     def integrate_llm(self, target):
         self.generating = True
-        desc = open('static/openai/oxlint.txt', 'r').read()
+        desc = open('static/openai/aurora_echo.txt', 'r').read()
         reaction = VisualReaction(thumbs=self.camera.thumbs, emotions=self.camera.get_facial_list())
         visual = f"Thumbs: up {reaction.thumbs['up']} times, down {reaction.thumbs['down']} times\n" \
                  f"Emotions: {'>'.join(reaction.emotions)}"
