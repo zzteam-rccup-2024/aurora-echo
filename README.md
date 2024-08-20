@@ -6,6 +6,20 @@ Aurora Echo is a visual-audio feedback system with maximized security.
 
 ### Requirements
 
+#### Port Audio
+
+Before install the dependencies in Python, you should check the installation of `portaudio` for installing PyAudio.
+
+```shell
+sudo apt install portaudio19-dev
+```
+
+Or if you are using macOS, please run:
+
+```shell
+brew install portaudio
+```
+
 First, you need to install requirements:
 
 ```shell
@@ -108,3 +122,28 @@ Or you can use the pretrained file and move it to `./data/sentiment/model.pth`.
 You can use `IMDB` dataset provided by Standford University, and using `PyTorch`, it will automatically download to `.data`.
 
 Or you can use the pretrained file and move it to `./data/models/facial.pth`.
+
+### Run the application
+
+Before starting to run, you need to install `uvicorn` to run the server.
+
+```shell
+pip install uvicorn
+```
+
+Then you can run the server by:
+
+```shell
+uvicorn main:app --reload
+```
+
+Now, please open [https://aurora-echo.zzdev.org](https://aurora-echo.zzdev.org) to use Aurora Echo. If you don't have the chance to access the International Internet, please manually build the frontend by running:
+
+```shell
+cd client
+# Suppose you have installed nodejs and pnpm
+pnpm install
+pnpm run build
+```
+
+Then you can use `http.server` module to serve the frontend.
