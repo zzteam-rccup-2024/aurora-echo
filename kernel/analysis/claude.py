@@ -23,9 +23,12 @@ class Claude:
         self.anthropic = Anthropic(api_key=self.api_key)
 
     def message(self, messages):
+        base = ''
+        for message in messages:
+            base += message.content
         contents = self.anthropic.messages.create(
             model=self.model,
-            messages=messages,
+            messages=[{'role': 'user', 'content': base}],
             max_tokens=1024
         ).content
 

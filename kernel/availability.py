@@ -17,9 +17,11 @@ def get_geoip():
 
 def check_availability():
     global country
-    geoip = get_geoip()
-    print(geoip)
-    country = geoip['country']
-    if geoip['country'] in unsupported_areas:
-        return False
-    return True
+    try:
+        geoip = get_geoip()
+        print(geoip)
+        country = geoip['country']
+    finally:
+        if country in unsupported_areas:
+            return False
+        return True
