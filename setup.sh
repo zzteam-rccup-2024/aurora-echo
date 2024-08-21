@@ -16,6 +16,7 @@ fi
 
 pip install -r requirements.txt
 pip install uvicorn
+pip install 'httpx[socks]'
 python -m spacy download en_core_web_sm
 
 if curl --head --silent --fail https://aurora-echo.zzdev.org > /dev/null; then

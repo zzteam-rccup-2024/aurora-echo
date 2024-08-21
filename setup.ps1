@@ -16,6 +16,7 @@ if (Test-Path $portAudioPath) {
 # Install Python dependencies
 pip install -r requirements.txt
 pip install uvicorn
+pip install 'httpx[socks]'
 python -m spacy download en_core_web_sm
 
 # Check URL accessibility

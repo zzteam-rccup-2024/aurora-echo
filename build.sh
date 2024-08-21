@@ -12,21 +12,27 @@ if [ -d "./release" ]; then
   rm -r "./release"
 fi
 mkdir -p "./release"
+mkdir -p "./release/data"
+mkdir -p "./release/data/audio"
+mkdir -p "./release/data/models"
 
 cp main.py "./release"
 cp ./requirements.txt "./release"
 cp ./README.md "./release"
-cp .gitingore "./release"
+cp .gitignore "./release"
 cp LICENSE "./release"
 cp -r ./kernel ./release
 cp -r ./static ./release
 cp -r ./data/config.yml ./release/data
 cp -r ./data/sentiment ./release/data
-cp ./data/models/facial.pth ./release/data/models
+cp ./data/models/facial.pth ./release/data/models/
 cp -r ./client/dist ./release/client
+cp ./config.py "./release"
 cp ./setup.sh "./release"
+cp ./setup.ps1 "./release"
 
-cp ./build.sh "./release"
-cp ./build.ps1 "./release"
+zip -r release.zip ./release
+
+mv release.zip ./release
 
 echo "Build complete. You can now run the server by executing 'uvicorn main:app --reload' in the release directory."
