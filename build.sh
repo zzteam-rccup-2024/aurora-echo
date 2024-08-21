@@ -42,6 +42,7 @@ cp -r ./client/dist ./release/client
 cp ./config.py "./release"
 cp ./setup.sh "./release"
 cp ./setup.ps1 "./release"
+cp ./data/readme-zh.md "./release/README-ZH.md"
 
 zip -r release.zip ./release
 
