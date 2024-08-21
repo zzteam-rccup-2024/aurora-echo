@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
+import legacy from '@vitejs/plugin-legacy'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import vueComponents from 'unplugin-vue-components/vite'
 import autoImport from 'unplugin-auto-import/vite'
@@ -13,6 +14,7 @@ export default defineConfig({
   plugins: [
     vue(),
     vueJsx(),
+    legacy(),
     vueDevTools(),
     vueComponents({
       resolvers: [
