@@ -1,4 +1,16 @@
-if command -v pnpm >/dev/null 2>&1; then
+# Default value for the build_client flag
+build_client=false
+
+# Parse arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --build-client) build_client=true ;;
+        *) echo "Unknown option: $1" ;;
+    esac
+    shift
+done
+
+if command -v pnpm >/dev/null 2>&1 && [ "$build_client" = true ]; then
   cd client
   pnpm install
   pnpm run build
@@ -23,7 +35,7 @@ cp .gitignore "./release"
 cp LICENSE "./release"
 cp -r ./kernel ./release
 cp -r ./static ./release
-cp -r ./data/config.yml ./release/data
+cp -r ./data/config-prod.yml ./release/data/config.yml
 cp -r ./data/sentiment ./release/data
 cp ./data/models/facial.pth ./release/data/models/
 cp -r ./client/dist ./release/client
