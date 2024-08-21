@@ -6,6 +6,17 @@ Aurora Echo is a visual-audio feedback system with maximized security.
 
 ### Requirements
 
+> Alternatively, you can run the setup script directly:
+> 
+> - Windows:
+>  ```pwsh
+>   .\setup.ps1
+>  ```
+> - macOS / Linux:
+>  ```sh
+>  . ./setup.sh
+>  ```
+
 #### Port Audio
 
 Before install the dependencies in Python, you should check the installation of `portaudio` for installing PyAudio.
