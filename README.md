@@ -11,6 +11,7 @@ Aurora Echo is a visual-audio feedback system with maximized security.
 Before install the dependencies in Python, you should check the installation of `portaudio` for installing PyAudio.
 
 ```shell
+sudo apt update
 sudo apt install portaudio19-dev
 ```
 
