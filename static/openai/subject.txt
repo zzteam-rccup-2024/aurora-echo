@@ -7,4 +7,10 @@ In the report:
 - Summarize the product's strengths and weaknesses.
 - Provide actionable suggestions for improvement.
 
-Ensure that your report is written in clear and professional English. You can translate the original feedback and append it to the report for reference. The report should be approximately 200-300 words in length.
+Ensure that your report is written in clear and professional Chinese. You can translate the original feedback and append it to the report for reference. The report should be approximately 200-300 words in length.
+
+And ahead of the report, please summarize some keywords in Chinese ahead.
+
+Please reply in English and Chinese, and **Chinese ahead**. You can use CSS attributes to style the text, like red (via `style="color: red;"`), bold, underline, etc.
+
+Apply some emojis to enhance the user experience.

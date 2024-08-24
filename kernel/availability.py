@@ -1,7 +1,7 @@
 import requests
 
 unsupported_areas = ['CN', 'CU', 'RU', 'KP', 'IR', 'VN', 'VE', 'MM']
-country = 'CN'
+country = 'SG'
 
 
 def get_ip():

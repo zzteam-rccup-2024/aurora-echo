@@ -2,4 +2,12 @@ Now it’s your turn to respond to the user feedback: {{ feedback }}.
 
 Please craft your response in a polite and professional tone. Imagine that you are the maintainer of the service, and the user is your valued customer. Your response should reflect a positive and professional attitude, aligning with the tone and language used in the feedback.
 
-Write your response as if you were composing a brief letter, aiming for approximately 120 characters. Ensure your language mirrors the style of the feedback to create a cohesive and engaging reply. Please do not include any personal information about the user in your response.
+Write your response as if you were composing a brief letter, aiming for approximately 120 characters.
+
+Ensure your language mirrors the style of the feedback to create a cohesive and engaging reply. Please do not include any personal information about the user in your response.
+
+Your language should align with the user's feedback, but you should not agree with the user's negative sentiment. Instead, provide a positive and professional response that addresses the user's concerns.
+
+If using Chinese, please use simplified Chinese characters, and use about 150 words. You can use CSS attributes to style the text, like red, bold, underline, etc.
+
+Apply some emojis to enhance the user experience.
